@@ -37,8 +37,8 @@ contract ETHLASVAULT is Ownable {
   }
 
   mapping(address => mapping(address => DepositInfo)) private _deposits;
-  mapping(address => TokenInfo) public tokenInfo;
-  mapping(address => uint256) public totalDeposits;
+  mapping(address => TokenInfo) private tokenInfo;
+  mapping(address => uint256) private totalDeposits;
   bool public paused;
 
   event Deposit(address indexed account, address indexed tokenAddress, uint256 amount);
@@ -59,7 +59,7 @@ contract ETHLASVAULT is Ownable {
    * @param _amount The amount of tokens to be deposited
    * @dev The function requires that the token is allowed and the contract is not paused
    */
-  function deposit(address _tokenAddress, uint256 _amount) public virtual whenNotPaused {
+  function deposit(address _tokenAddress, uint256 _amount) public whenNotPaused {
     require(_amount > 0, 'Deposit amount must be greater than zero');
     require(tokenInfo[_tokenAddress].allowed, 'Token not allowed');
 
@@ -80,7 +80,7 @@ contract ETHLASVAULT is Ownable {
    * @param _amount The amount of tokens to be withdrawn
    * @dev The function requires that the token is allowed, the contract is not paused, and the owner has sufficient balance
    */
-  function withdraw(address _tokenAddress, uint256 _amount) public virtual onlyOwner whenNotPaused {
+  function withdraw(address _tokenAddress, uint256 _amount) public onlyOwner whenNotPaused {
     require(_amount > 0, 'Withdrawal amount must be greater than zero');
     require(tokenInfo[_tokenAddress].allowed, 'Token not allowed');
 
