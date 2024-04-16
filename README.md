@@ -44,13 +44,19 @@ yarn install
 
 Create a `.env` file in the project root directory and specify any necessary environment variables. You may need to configure variables such as Ethereum network endpoints or API keys depending on your use case.Please refer to the `.env.example` file for required variable placeholers
 
+ However, note that industry standards advise against adding private keys or sensitive information directly in `.env` files for security reasons. Instead, it's recommended to use secure methods of handling sensitive data, especially in production environments.
+
+Nevertheless, for development purposes and easier testing, the project provides provisions for including private keys, RPC keys, and related secret keys in the `.env` file. Exercise caution when including sensitive information and ensure that proper security measures are in place, especially when deploying to public networks.
+
+**Note:** The ETV Token contract is provided for testing purposes on local and test networks. If you do not need it, you can comment out the relevant sections in the deployment script.
+
 ### 5. Start Development
 
 You can now start development on the ETHLAS VAULT project. Use the available scripts defined in the `package.json` file to compile contracts, run tests, and deploy contracts as needed.
 
 ### 6. Interact with Contracts
 
-Once deployed, you can interact with the deployed contracts using tools like Hardhat, Truffle, or web3.js. Refer to the project's documentation or source code for details on contract functionality and usage.
+Once deployed, you can interact with ETHLAS VAULT through Ethereum wallets like MetaMask or programmatically using Ethereum-compatible libraries such as ethers.js. By calling the contract's functions, users can perform various operations, including depositing tokens, withdrawing tokens, and managing token allowances.
 
 ## Available Scripts
 
