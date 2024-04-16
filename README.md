@@ -11,6 +11,7 @@ Before you begin, ensure that you have the following prerequisites installed on 
 - Git: [Download and install Git](https://git-scm.com/downloads)
 - Node.js and npm (Node Package Manager): [Download and install Node.js](https://nodejs.org/en/download/)
 - Yarn: [Download and install Yarn](https://classic.yarnpkg.com/en/docs/install/)
+- slither(Optional): [Guide on slither installation and usage](https://hackenproof.com/blog/for-hackers/how-to-use-slither-for-auditing-smart-contracts)
 
 ## Setup Steps
 
