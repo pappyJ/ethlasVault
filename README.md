@@ -1,124 +1,195 @@
-# The ETHLAS TOKEN VAULT
+# The ETHLAS VAULT: A Secure ERC20 Token Vault
 
-This project was developed with hardhat and also integrating other tools commonly used alongside Hardhat in the ecosystem.
+## Setting Up the ETHLAS VAULT Project with Yarn
 
-The project comes with a test for that contract, a script that deploys the contract. It also comes with a variety of other tools, preconfigured to work with the project code.
+This guide provides instructions on how to set up the ETHLAS VAULT project on your local machine using Yarn from the project repository.
 
-Try running some of the following tasks:
+## Prerequisites
 
-```shell
-npx hardhat accounts
-npx hardhat compile
-npx hardhat clean
-npx hardhat test
-npx hardhat node
-npx hardhat help
-REPORT_GAS=true npx hardhat test
-npx hardhat coverage
-npx hardhat run scripts/deploy.ts
-TS_NODE_FILES=true npx ts-node scripts/deploy.ts
-npx eslint '**/*.{js,ts}'
-npx eslint '**/*.{js,ts}' --fix
-npx prettier '**/*.{json,sol,md}' --check
-npx prettier '**/*.{json,sol,md}' --write
-npx solhint 'contracts/**/*.sol'
-npx solhint 'contracts/**/*.sol' --fix
+Before you begin, ensure that you have the following prerequisites installed on your system:
+
+- Git: [Download and install Git](https://git-scm.com/downloads)
+- Node.js and npm (Node Package Manager): [Download and install Node.js](https://nodejs.org/en/download/)
+- Yarn: [Download and install Yarn](https://classic.yarnpkg.com/en/docs/install/)
+
+## Setup Steps
+
+Follow these steps to set up the ETHLAS VAULT project on your machine using Yarn:
+
+### 1. Clone the Repository
+
+Open your terminal or command prompt and run the following command to clone the ETHLAS VAULT project repository:
+
+```bash
+git clone https://github.com/pappyJ/ethlasVault.git
 ```
 
-# Etherscan verification
+### 2. Navigate to the Project Directory
 
-To try out Etherscan verification, you first need to deploy a contract to an Ethereum network that's supported by Etherscan, such as Ropsten.
+Navigate into the project directory using the `cd` command:
 
-In this project, copy the .env.example file to a file named .env, and then edit it to fill in the details. Enter your Etherscan API key, your Ropsten node URL (eg from Alchemy), and the private key of the account which will send the deployment transaction. With a valid .env file in place, first deploy your contract:
-
-```shell
-hardhat run --network ropsten scripts/sample-script.ts
+```bash
+cd ethlasVault
 ```
 
-Then, copy the deployment address and paste it in to replace `DEPLOYED_CONTRACT_ADDRESS` in this command:
+### 3. Install Dependencies
 
-```shell
-npx hardhat verify --network ropsten DEPLOYED_CONTRACT_ADDRESS "Hello, Hardhat!"
+Install project dependencies using Yarn:
+
+```bash
+yarn install
 ```
 
-# Performance optimizations
+### 4. Configure Environment Variables
 
-For faster runs of your tests and scripts, consider skipping ts-node's type checking by setting the environment variable `TS_NODE_TRANSPILE_ONLY` to `1` in hardhat's environment. For more details see [the documentation](https://hardhat.org/guides/typescript.html#performance-optimizations).
+Create a `.env` file in the project root directory and specify any necessary environment variables. You may need to configure variables such as Ethereum network endpoints or API keys depending on your use case.Please refer to the `.env.example` file for required variable placeholers
+
+### 5. Start Development
+
+You can now start development on the ETHLAS VAULT project. Use the available scripts defined in the `package.json` file to compile contracts, run tests, and deploy contracts as needed.
+
+### 6. Interact with Contracts
+
+Once deployed, you can interact with the deployed contracts using tools like Hardhat, Truffle, or web3.js. Refer to the project's documentation or source code for details on contract functionality and usage.
+
+## Available Scripts
+
+- **compile**: Compiles the Solidity contracts using Hardhat.
+- **coverage**: Generates code coverage reports for the contracts using Hardhat's built-in coverage tool.
+- **docs**: Generates documentation for the contracts using Solidity-docgen.
+- **slither**: Runs the Slither static analysis tool on the contracts to detect potential vulnerabilities.
+- **fork:node**: Starts a local Hardhat node forked from an existing Ethereum network (e.g., mainnet).
+- **fork:script**: Runs a script with a forked local Hardhat node for testing or development purposes.
+- **lint:check**: Checks the Solidity contracts and project files for linting errors using Solhint and Prettier.
+- **lint:fix**: Fixes linting errors in the Solidity contracts and project files using Solhint and Prettier.
+- **release**: Automatically generates a new version tag for the project using standard-version.
+- **test**: Compiles the contracts and runs the tests using Hardhat and Mocha.
+- **test:parallel**: Compiles the contracts and runs the tests in parallel using Hardhat and Mocha.
+- **test:gas**: Runs the tests and reports gas usage for each test using Hardhat.
+- **deploy:sepolia**: Deploys the contracts to the "sepolia" network using a deployment script.
+- **deploy:mainnet**: Deploys the contracts to the Ethereum mainnet using a deployment script.
+
+## Deployment Script
+
+The deployment script (`scripts/deployment.ts`) automates the deployment process for the ETHLAS VAULT contracts. Here's how it works:
+
+- The script fetches the deployer's account using `ethers.getSigners()`.
+- It deploys the ETHLAS VAULT and ETV Token contracts using their respective contract factories.
+- Once deployed, it logs the addresses of the deployed contracts and saves them to a configuration file (`contracts/addressBook.md`).
+- Finally, it verifies the deployed contracts using the `verify` function.
+
+**Note:** The ETV Token contract is provided for testing purposes on local and test networks. If you do not need it, you can comment out the relevant sections in the deployment script.
+
+## Conclusion
+
+You've successfully set up the ETHLAS VAULT project on your local machine using Yarn. You can now start exploring the codebase, making modifications, and interacting with the deployed contracts as needed. Happy coding!
 
 
-**ETHLAS VAULT**
 
-_SPDX-License-Identifier: MIT_
+## ETHLAS VAULT: Contract Structure
 
-**Introduction**
+*SPDX-License-Identifier: MIT*
 
-This document describes the ETHLAS VAULT smart contract, a platform that allows users to deposit and withdraw ERC20 tokens. It utilizes access control functionalities from OpenZeppelin to ensure secure operations.
+**Abstract**
+
+The ETHLAS VAULT smart contract facilitates secure deposits and withdrawals of ERC20 tokens. It leverages access control mechanisms from OpenZeppelin Contracts to ensure authorized operations and adheres to industry best practices for smart contract development.
 
 **Features**
 
-- Users can deposit supported ERC20 tokens.
-- Users can withdraw their deposited tokens.
-- Contract owner can manage allowed tokens (allow/disallow).
-- Contract owner can pause and unpause contract functionality.
-- Deposit and withdrawal events are emitted for tracking purposes.
+* **Seamless ERC20 Token Management:** Users can deposit and withdraw supported ERC20 tokens with ease.
+* **Granular Token Allowances:** The contract owner can manage whitelisted tokens, granting or revoking deposit/withdrawal permissions for specific tokens.
+* **Pause/Unpause Functionality:** The owner has the ability to temporarily pause contract operations for maintenance or security purposes.
+* **Transparent Event Logging:** Deposit, withdrawal, token allowance changes, and pause/unpause events are emitted for comprehensive audit trails.
 
-**Technical details**
+**Technical Specifications**
 
-- Solidity version: >= 0.8.20
-- Dependencies:
-  - OpenZeppelin Contracts:
-    - `@openzeppelin/contracts/token/ERC20/IERC20.sol`
-    - `@openzeppelin/contracts/utils/math/SafeMath.sol`
-    - `@openzeppelin/contracts/access/Ownable.sol`
+* **Supported Solidity Version:** >= 0.8.20
+* **External Dependencies:**
+    * OpenZeppelin Contracts:
+        * `@openzeppelin/contracts/token/ERC20/IERC20.sol`
+        * `@openzeppelin/contracts/utils/math/SafeMath.sol`
+        * `@openzeppelin/contracts/access/Ownable.sol`
 
-**Contract Structure**
+**Contract Architecture**
 
-- **`DepositInfo` struct:** Stores deposit amount and timestamp for a user and token.
-- **`TokenInfo` struct:** Stores allowed status and decimal places of a token.
-- **Mappings:**
-  - `_deposits`: Maps user address to a mapping of token address to `DepositInfo`.
-  - `tokenInfo`: Maps token address to `TokenInfo`.
-  - `totalDeposits`: Maps token address to total deposited amount.
-- **Modifiers:**
-  - `whenNotPaused`: Ensures the contract is not paused before function execution.
-- **Events:**
-  - `Deposit`: Emitted when a user deposits tokens.
-  - `Withdrawal`: Emitted when a user withdraws tokens.
-  - `TokenAllowed`: Emitted when the owner allows or disallows a token.
-  - `Paused`: Emitted when the contract is paused or unpaused.
+* **`DepositInfo` Struct:** Stores deposit amount and timestamp for a specific user and token combination.
+* **`TokenInfo` Struct:** Tracks the allowed status and decimal places for each supported token.
+* **Mappings:**
+    * `_deposits`: Maps user address to a mapping of token address to `DepositInfo`.
+    * `tokenInfo`: Maps token address to `TokenInfo`.
+    * `totalDeposits`: Maps token address to the total deposited amount for that token.
+* **Modifiers:**
+    * `whenNotPaused`: Ensures a function can only be called when the contract is not paused.
+* **Events:**
+    * `Deposit`: Records a user's token deposit.
+    * `Withdrawal`: Records a user's token withdrawal.
+    * `TokenAllowed`: Indicates a change in the allowance status for a token.
+    * `Paused`: Signals the contract being paused or unpaused.
 
-**Functions**
+**Functionalities**
 
-- **`constructor`:** Initializes the contract with the owner set to the deployer address.
-- **`deposit(address _tokenAddress, uint256 _amount)`:** Allows a user to deposit tokens.
-  - Requires:
-    - `_amount` to be greater than zero.
-    - Token to be allowed.
-    - Contract not to be paused.
-  - Transfers tokens from user to contract and updates deposit information.
-- **`withdraw(address _tokenAddress, uint256 _amount)`:** Allows the owner to withdraw tokens.
-  - Requires:
-    - `_amount` to be greater than zero.
-    - Token to be allowed.
-    - Contract not to be paused.
-    - Owner to have sufficient balance.
-  - Transfers tokens from contract to user and updates deposit information.
-- **`allowToken(address _tokenAddress, bool _allowed, uint8 _decimals)`:** Allows the owner to manage token allowance and decimals.
-  - Sets the `allowed` and `decimals` values for the specified token.
-- **`pause()`:** Pauses the contract, preventing deposits and withdrawals (only owner can call).
-- **`unpause()`:** Unpauses the contract, allowing deposits and withdrawals again (only owner can call).
-- **`getDepositInfo(address _account, address _tokenAddress)`:** Retrieves deposit information for a user and token.
-- **`getTotalDeposits(address _tokenAddress)`:** Retrieves the total deposits for a token.
-- **`getTokenInfo(address _tokenAddress)`:** Retrieves the allowed status and decimal places for a token.
+* **`deposit(address _tokenAddress, uint256 _amount)`:** Enables users to deposit tokens.
 
-**Deployment and Usage**
+**Function Prerequisites:**
 
-Refer to the deployed contract address and interact with the contract functions using a compatible wallet or web3 interface.
+* `_tokenAddress`: (Address) The address of the ERC20 token to be deposited. Must be a valid ERC20 token address.
+* `_amount`: (uint256) The amount of tokens to deposit. Must be greater than zero.
+* Contract must not be paused (enforced by `whenNotPaused` modifier).
+* The token must be allowed for deposit (checked within the function).
+
+* **`withdraw(address _tokenAddress, uint256 _amount)`:** Allows the owner to withdraw tokens.
+
+**Function Prerequisites:**
+
+* `_tokenAddress`: (Address) The address of the ERC20 token to be withdrawn. Must be a valid ERC20 token address.
+* `_amount`: (uint256) The amount of tokens to withdraw. Must be greater than zero.
+* Contract must not be paused (enforced by `whenNotPaused` modifier).
+* The token must be allowed for withdrawal (checked within the function).
+* Owner must have sufficient balance (checked within the function).
+
+* **`allowToken(address _tokenAddress, bool _allowed, uint8 _decimals)`:** Grants the owner control over token allowances and decimals.
+
+**Function Prerequisites:**
+
+* `_tokenAddress`: (Address) The address of the ERC20 token to manage. Must be a valid ERC20 token address.
+* `_allowed`: (bool) Whether the token is allowed for deposits and withdrawals (true) or not (false).
+* `_decimals`: (uint8) The number of decimal places for the token. Must be a valid value between 0 and the maximum supported by the ERC20 standard (typically 18).
+
+* **`pause()`:** Pauses contract operations, restricting deposits and withdrawals (owner-only function).
+
+**Function Prerequisites:**
+
+* This function can only be called by the contract owner (enforced by the `Ownable` modifier).
+
+* **`unpause()`:** Resumes contract operations, allowing deposits and withdrawals again (owner-only function).
+
+* **`getDepositInfo(address _account, address _tokenAddress)`:** Retrieves deposit details for a user and a specific token.
+
+**Function Prerequisites:**
+
+* `_account`: (Address) The address of the user for whom to retrieve deposit information. Must be a valid Ethereum address.
+* `_tokenAddress`: (Address) The address of the ERC20 token for which to retrieve deposit information. Must be a valid ERC20 token address.
+
+* **`getTotalDeposits(address _tokenAddress)`:** Returns the total amount deposited for a particular token.
+
+**Function Prerequisites:**
+
+* `_tokenAddress`: (Address) The address of the ERC20 token for which to retrieve the total deposits. Must be a valid ERC20 token address.
+
+* **`getTokenInfo(address _tokenAddress)`:** Fetches the allowed status and decimal places for a given token.
+
+**Function Prerequisites:**
+
+* `_tokenAddress`: (Address) The address of the ERC20 token for which to retrieve information. Must be a valid ERC20 token address.
+
+**Usage**
+
+Users can interact with ETHLAS VAULT through Ethereum wallets like MetaMask or programmatically using Ethereum-compatible libraries such as ethers.js. By calling the contract's functions, users can perform various operations, including depositing tokens, withdrawing tokens, and managing token allowances.
 
 **Security Considerations**
 
-This contract utilizes SafeMath for arithmetic operations to prevent potential overflow/underflow vulnerabilities. However, it's crucial to conduct thorough security audits before deploying the contract in a production environment.
+The contract employs SafeMath for mathematical operations to mitigate potential overflow/underflow vulnerabilities. However, rigorous security audits are essential before deploying the contract in a production environment.
 
 **Disclaimer**
 
-This is provided for development purposes only. Use this code at your own risk and conduct proper testing before deployment.
+This is for development purposes only. Use this code at your own risk and conduct thorough testing before deployment.

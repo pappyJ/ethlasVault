@@ -21,13 +21,13 @@ const config: HardhatUserConfigPro = {
     },
     mainnet: {
       chainId: 1,
-      url: `https://mainnet.infura.io/v3/${process.env.INFURA_KEY}`,
+      url: process.env.ETH_RPC_URL || `https://eth.llamarpc.com`,
       accounts: [privateKey],
     },
 
     sepolia: {
       chainId: 11155111,
-      url: 'https://ethereum-sepolia-rpc.publicnode.com	',
+      url: process.env.SEP_RPC_URL || 'https://ethereum-sepolia-rpc.publicnode.com	',
       accounts: [privateKey],
     },
   },
