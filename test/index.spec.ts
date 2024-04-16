@@ -33,9 +33,10 @@ describe('Token Vault', function () {
       const { ETVToken, EthlasVault, user1 } = await loadFixture(deployVault);
 
       const depositAmount = ethers.utils.parseEther('100');
+      const tokenDecimal = 18;
 
       // Allow the token in the EthlasVault contract
-      await EthlasVault.allowToken(ETVToken.address, true);
+      await EthlasVault.allowToken(ETVToken.address, true, tokenDecimal);
 
       // User1 approves the EthlasVault contract to spend their tokens
       await ETVToken.connect(user1).approve(EthlasVault.address, depositAmount);
@@ -66,9 +67,10 @@ describe('Token Vault', function () {
     it('Should not allow deposit with amount less than or equal to zero', async function () {
       // load contract defaults
       const { ETVToken, EthlasVault, user1 } = await loadFixture(deployVault);
+      const tokenDecimal = 18;
 
       // Allow the token in the EthlasVault contract
-      await EthlasVault.allowToken(ETVToken.address, true);
+      await EthlasVault.allowToken(ETVToken.address, true, tokenDecimal);
 
       // User1 approves the EthlasVault contract to spend their tokens
       await ETVToken.connect(user1).approve(EthlasVault.address, ethers.utils.parseEther('100'));
@@ -84,9 +86,10 @@ describe('Token Vault', function () {
       const { ETVToken, EthlasVault, user1 } = await loadFixture(deployVault);
 
       const depositAmount = ethers.utils.parseEther('100');
+      const tokenDecimal = 18;
 
       // Allow the token in the EthlasVault contract
-      await EthlasVault.allowToken(ETVToken.address, true);
+      await EthlasVault.allowToken(ETVToken.address, true, tokenDecimal);
 
       // User1 approves the EthlasVault contract to spend their tokens
       await ETVToken.connect(user1).approve(EthlasVault.address, depositAmount);
@@ -109,12 +112,19 @@ describe('Token Vault', function () {
       const { ETVToken, EthlasVault, user1 } = await loadFixture(deployVault);
 
       const depositAmount = ethers.utils.parseEther('100');
+      const tokenDecimal = 18;
 
       // User1 approves the EthlasVault contract to spend their tokens
       await ETVToken.connect(user1).approve(EthlasVault.address, depositAmount);
 
+      // allow token
+      await EthlasVault.allowToken(ETVToken.address, true, tokenDecimal);
+
       // User1 deposits tokens
       await EthlasVault.connect(user1).deposit(ETVToken.address, depositAmount);
+
+      // disallow token
+      await EthlasVault.allowToken(ETVToken.address, false, tokenDecimal);
 
       // Owner tries to withdraw the tokens, but the token is not allowed
       await expect(EthlasVault.withdraw(ETVToken.address, depositAmount)).to.be.revertedWith('Token not allowed');
@@ -123,9 +133,10 @@ describe('Token Vault', function () {
     it('Should not allow withdrawal with amount less than or equal to zero', async function () {
       // load contract defaults
       const { ETVToken, EthlasVault } = await loadFixture(deployVault);
+      const tokenDecimal = 18;
 
       // Allow the token in the EthlasVault contract
-      await EthlasVault.allowToken(ETVToken.address, true);
+      await EthlasVault.allowToken(ETVToken.address, true, tokenDecimal);
 
       // Owner tries to withdraw zero tokens
       await expect(EthlasVault.withdraw(ETVToken.address, 0)).to.be.revertedWith('Withdrawal amount must be greater than zero');
@@ -136,9 +147,10 @@ describe('Token Vault', function () {
       const { ETVToken, EthlasVault, user1 } = await loadFixture(deployVault);
 
       const depositAmount = ethers.utils.parseEther('100');
+      const tokenDecimal = 18;
 
       // Allow the token in the EthlasVault contract
-      await EthlasVault.allowToken(ETVToken.address, true);
+      await EthlasVault.allowToken(ETVToken.address, true, tokenDecimal);
 
       // User1 approves the EthlasVault contract to spend their tokens
       await ETVToken.connect(user1).approve(EthlasVault.address, depositAmount);
@@ -155,18 +167,26 @@ describe('Token Vault', function () {
     it('Should allow a token', async function () {
       // load contract defaults
       const { ETVToken, EthlasVault } = await loadFixture(deployVault);
+      const tokenDecimal = 18;
 
-      await EthlasVault.allowToken(ETVToken.address, true);
-      expect(await EthlasVault.allowedTokens(ETVToken.address)).to.equal(true);
+      await EthlasVault.allowToken(ETVToken.address, true, tokenDecimal);
+
+      const tokenInfo = await EthlasVault.tokenInfo(ETVToken.address);
+
+      expect(tokenInfo[0]).to.equal(true);
     });
 
     it('Should disallow a token', async function () {
       // load contract defaults
       const { ETVToken, EthlasVault } = await loadFixture(deployVault);
+      const tokenDecimal = 18;
 
-      await EthlasVault.allowToken(ETVToken.address, true);
-      await EthlasVault.allowToken(ETVToken.address, false);
-      expect(await EthlasVault.allowedTokens(ETVToken.address)).to.equal(false);
+      await EthlasVault.allowToken(ETVToken.address, true, tokenDecimal);
+      await EthlasVault.allowToken(ETVToken.address, false, tokenDecimal);
+
+      const tokenInfo = await EthlasVault.tokenInfo(ETVToken.address);
+
+      expect(tokenInfo[0]).to.equal(false);
     });
   });
 
@@ -191,8 +211,9 @@ describe('Token Vault', function () {
     it('Should not allow deposit when paused', async function () {
       // load contract defaults
       const { ETVToken, EthlasVault, user1 } = await loadFixture(deployVault);
+      const tokenDecimal = 18;
 
-      await EthlasVault.allowToken(ETVToken.address, true);
+      await EthlasVault.allowToken(ETVToken.address, true, tokenDecimal);
       await EthlasVault.pause();
 
       // User1 approves the EthlasVault contract to spend their tokens
@@ -207,8 +228,9 @@ describe('Token Vault', function () {
     it('Should not allow withdrawal when paused', async function () {
       // load contract defaults
       const { ETVToken, EthlasVault } = await loadFixture(deployVault);
+      const tokenDecimal = 18;
 
-      await EthlasVault.allowToken(ETVToken.address, true);
+      await EthlasVault.allowToken(ETVToken.address, true, tokenDecimal);
       await EthlasVault.pause();
 
       // Owner tries to withdraw tokens, but the contract is paused
