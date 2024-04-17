@@ -4,6 +4,8 @@
 
 This guide provides instructions on how to set up the ETHLAS VAULT project on your local machine using Yarn from the project repository.
 
+**Deployed Version On Sepolia Testnet:** [ETHVAULT URL](https://sepolia.etherscan.io/address/0x4E623f6f62A932c5289e494f2EA457e926903A97#code)
+
 ## Prerequisites
 
 Before you begin, ensure that you have the following prerequisites installed on your system:
@@ -45,7 +47,7 @@ yarn install
 
 Create a `.env` file in the project root directory and specify any necessary environment variables. You may need to configure variables such as Ethereum network endpoints or API keys depending on your use case.Please refer to the `.env.example` file for required variable placeholers
 
- However, note that industry standards advise against adding private keys or sensitive information directly in `.env` files for security reasons. Instead, it's recommended to use secure methods of handling sensitive data, especially in production environments.
+However, note that industry standards advise against adding private keys or sensitive information directly in `.env` files for security reasons. Instead, it's recommended to use secure methods of handling sensitive data, especially in production environments.
 
 Nevertheless, for development purposes and easier testing, the project provides provisions for including private keys, RPC keys, and related secret keys in the `.env` file. Exercise caution when including sensitive information and ensure that proper security measures are in place, especially when deploying to public networks.
 
@@ -91,11 +93,9 @@ The deployment script (`scripts/deployment.ts`) automates the deployment process
 
 You've successfully set up the ETHLAS VAULT project on your local machine using Yarn. You can now start exploring the codebase, making modifications, and interacting with the deployed contracts as needed. Happy coding!
 
-
-
 ## ETHLAS VAULT: Contract Structure
 
-*SPDX-License-Identifier: MIT*
+_SPDX-License-Identifier: MIT_
 
 **Abstract**
 
@@ -103,91 +103,91 @@ The ETHLAS VAULT smart contract facilitates secure deposits and withdrawals of E
 
 **Features**
 
-* **Seamless ERC20 Token Management:** Users can deposit and withdraw supported ERC20 tokens with ease.
-* **Granular Token Allowances:** The contract owner can manage whitelisted tokens, granting or revoking deposit/withdrawal permissions for specific tokens.
-* **Pause/Unpause Functionality:** The owner has the ability to temporarily pause contract operations for maintenance or security purposes.
-* **Transparent Event Logging:** Deposit, withdrawal, token allowance changes, and pause/unpause events are emitted for comprehensive audit trails.
+- **Seamless ERC20 Token Management:** Users can deposit and withdraw supported ERC20 tokens with ease.
+- **Granular Token Allowances:** The contract owner can manage whitelisted tokens, granting or revoking deposit/withdrawal permissions for specific tokens.
+- **Pause/Unpause Functionality:** The owner has the ability to temporarily pause contract operations for maintenance or security purposes.
+- **Transparent Event Logging:** Deposit, withdrawal, token allowance changes, and pause/unpause events are emitted for comprehensive audit trails.
 
 **Technical Specifications**
 
-* **Supported Solidity Version:** >= 0.8.20
-* **External Dependencies:**
-    * OpenZeppelin Contracts:
-        * `@openzeppelin/contracts/token/ERC20/IERC20.sol`
-        * `@openzeppelin/contracts/utils/math/SafeMath.sol`
-        * `@openzeppelin/contracts/access/Ownable.sol`
+- **Supported Solidity Version:** >= 0.8.20
+- **External Dependencies:**
+  - OpenZeppelin Contracts:
+    - `@openzeppelin/contracts/token/ERC20/IERC20.sol`
+    - `@openzeppelin/contracts/utils/math/SafeMath.sol`
+    - `@openzeppelin/contracts/access/Ownable.sol`
 
 **Contract Architecture**
 
-* **`DepositInfo` Struct:** Stores deposit amount and timestamp for a specific user and token combination.
-* **`TokenInfo` Struct:** Tracks the allowed status and decimal places for each supported token.
-* **Mappings:**
-    * `_deposits`: Maps user address to a mapping of token address to `DepositInfo`.
-    * `tokenInfo`: Maps token address to `TokenInfo`.
-    * `totalDeposits`: Maps token address to the total deposited amount for that token.
-* **Modifiers:**
-    * `whenNotPaused`: Ensures a function can only be called when the contract is not paused.
-* **Events:**
-    * `Deposit`: Records a user's token deposit.
-    * `Withdrawal`: Records a user's token withdrawal.
-    * `TokenAllowed`: Indicates a change in the allowance status for a token.
-    * `Paused`: Signals the contract being paused or unpaused.
+- **`DepositInfo` Struct:** Stores deposit amount and timestamp for a specific user and token combination.
+- **`TokenInfo` Struct:** Tracks the allowed status and decimal places for each supported token.
+- **Mappings:**
+  - `_deposits`: Maps user address to a mapping of token address to `DepositInfo`.
+  - `tokenInfo`: Maps token address to `TokenInfo`.
+  - `totalDeposits`: Maps token address to the total deposited amount for that token.
+- **Modifiers:**
+  - `whenNotPaused`: Ensures a function can only be called when the contract is not paused.
+- **Events:**
+  - `Deposit`: Records a user's token deposit.
+  - `Withdrawal`: Records a user's token withdrawal.
+  - `TokenAllowed`: Indicates a change in the allowance status for a token.
+  - `Paused`: Signals the contract being paused or unpaused.
 
 **Functionalities**
 
-* **`deposit(address _tokenAddress, uint256 _amount)`:** Enables users to deposit tokens.
+- **`deposit(address _tokenAddress, uint256 _amount)`:** Enables users to deposit tokens.
 
 **Function Prerequisites:**
 
-* `_tokenAddress`: (Address) The address of the ERC20 token to be deposited. Must be a valid ERC20 token address.
-* `_amount`: (uint256) The amount of tokens to deposit. Must be greater than zero.
-* Contract must not be paused (enforced by `whenNotPaused` modifier).
-* The token must be allowed for deposit (checked within the function).
+- `_tokenAddress`: (Address) The address of the ERC20 token to be deposited. Must be a valid ERC20 token address.
+- `_amount`: (uint256) The amount of tokens to deposit. Must be greater than zero.
+- Contract must not be paused (enforced by `whenNotPaused` modifier).
+- The token must be allowed for deposit (checked within the function).
 
-* **`withdraw(address _tokenAddress, uint256 _amount)`:** Allows the owner to withdraw tokens.
-
-**Function Prerequisites:**
-
-* `_tokenAddress`: (Address) The address of the ERC20 token to be withdrawn. Must be a valid ERC20 token address.
-* `_amount`: (uint256) The amount of tokens to withdraw. Must be greater than zero.
-* Contract must not be paused (enforced by `whenNotPaused` modifier).
-* The token must be allowed for withdrawal (checked within the function).
-* Owner must have sufficient balance (checked within the function).
-
-* **`allowToken(address _tokenAddress, bool _allowed, uint8 _decimals)`:** Grants the owner control over token allowances and decimals.
+- **`withdraw(address _tokenAddress, uint256 _amount)`:** Allows the owner to withdraw tokens.
 
 **Function Prerequisites:**
 
-* `_tokenAddress`: (Address) The address of the ERC20 token to manage. Must be a valid ERC20 token address.
-* `_allowed`: (bool) Whether the token is allowed for deposits and withdrawals (true) or not (false).
-* `_decimals`: (uint8) The number of decimal places for the token. Must be a valid value between 0 and the maximum supported by the ERC20 standard (typically 18).
+- `_tokenAddress`: (Address) The address of the ERC20 token to be withdrawn. Must be a valid ERC20 token address.
+- `_amount`: (uint256) The amount of tokens to withdraw. Must be greater than zero.
+- Contract must not be paused (enforced by `whenNotPaused` modifier).
+- The token must be allowed for withdrawal (checked within the function).
+- Owner must have sufficient balance (checked within the function).
 
-* **`pause()`:** Pauses contract operations, restricting deposits and withdrawals (owner-only function).
-
-**Function Prerequisites:**
-
-* This function can only be called by the contract owner (enforced by the `Ownable` modifier).
-
-* **`unpause()`:** Resumes contract operations, allowing deposits and withdrawals again (owner-only function).
-
-* **`getDepositInfo(address _account, address _tokenAddress)`:** Retrieves deposit details for a user and a specific token.
+- **`allowToken(address _tokenAddress, bool _allowed, uint8 _decimals)`:** Grants the owner control over token allowances and decimals.
 
 **Function Prerequisites:**
 
-* `_account`: (Address) The address of the user for whom to retrieve deposit information. Must be a valid Ethereum address.
-* `_tokenAddress`: (Address) The address of the ERC20 token for which to retrieve deposit information. Must be a valid ERC20 token address.
+- `_tokenAddress`: (Address) The address of the ERC20 token to manage. Must be a valid ERC20 token address.
+- `_allowed`: (bool) Whether the token is allowed for deposits and withdrawals (true) or not (false).
+- `_decimals`: (uint8) The number of decimal places for the token. Must be a valid value between 0 and the maximum supported by the ERC20 standard (typically 18).
 
-* **`getTotalDeposits(address _tokenAddress)`:** Returns the total amount deposited for a particular token.
-
-**Function Prerequisites:**
-
-* `_tokenAddress`: (Address) The address of the ERC20 token for which to retrieve the total deposits. Must be a valid ERC20 token address.
-
-* **`getTokenInfo(address _tokenAddress)`:** Fetches the allowed status and decimal places for a given token.
+- **`pause()`:** Pauses contract operations, restricting deposits and withdrawals (owner-only function).
 
 **Function Prerequisites:**
 
-* `_tokenAddress`: (Address) The address of the ERC20 token for which to retrieve information. Must be a valid ERC20 token address.
+- This function can only be called by the contract owner (enforced by the `Ownable` modifier).
+
+- **`unpause()`:** Resumes contract operations, allowing deposits and withdrawals again (owner-only function).
+
+- **`getDepositInfo(address _account, address _tokenAddress)`:** Retrieves deposit details for a user and a specific token.
+
+**Function Prerequisites:**
+
+- `_account`: (Address) The address of the user for whom to retrieve deposit information. Must be a valid Ethereum address.
+- `_tokenAddress`: (Address) The address of the ERC20 token for which to retrieve deposit information. Must be a valid ERC20 token address.
+
+- **`getTotalDeposits(address _tokenAddress)`:** Returns the total amount deposited for a particular token.
+
+**Function Prerequisites:**
+
+- `_tokenAddress`: (Address) The address of the ERC20 token for which to retrieve the total deposits. Must be a valid ERC20 token address.
+
+- **`getTokenInfo(address _tokenAddress)`:** Fetches the allowed status and decimal places for a given token.
+
+**Function Prerequisites:**
+
+- `_tokenAddress`: (Address) The address of the ERC20 token for which to retrieve information. Must be a valid ERC20 token address.
 
 **Usage**
 
